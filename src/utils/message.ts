@@ -1,10 +1,3 @@
-/*
- * @Author: Faith
- * @Date: 2023-02-04 10:49
- * @LastAuthor: Faith
- * @LastEditTime: 2023-02-04 12:18
- * @Description: 
- */
 import { type VNode } from "vue";
 import { isFunction } from "@pureadmin/utils";
 import { type MessageHandler, ElMessage } from "element-plus";

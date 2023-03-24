@@ -2,10 +2,10 @@
  * @Author: Faith
  * @Date: 2022-04-02 17:08
  * @LastAuthor: Faith
- * @LastEditTime: 2023-02-12 13:38
+ * @LastEditTime: 2023-03-22 15:36
  * @Description: 超图分析函数
  */
-
+import type { GeoJsonObject } from 'geojson'
 import { message } from "@/utils/message";
 import {
   DatasourceService,
@@ -84,7 +84,7 @@ async function getFieldsName(url = CONFIG.BASEURL.dataUrl) {
     dataset: "earthquakePoint"
   });
   return await new Promise((resolve, reject) => {
-    new FieldService(url).getFields(fieldsParam, (serviceResult) => {
+    new FieldService(url).getFields(fieldsParam, serviceResult => {
       if (serviceResult.type === "processFailed" || serviceResult.error) {
         message(`${serviceResult.error}`, { type: "error", grouping: true });
 
@@ -147,7 +147,7 @@ async function sqlQuery({
   console.log(sqlParameters);
   const sqlParam = new GetFeaturesBySQLParameters(sqlParameters);
   return await new Promise((resolve, reject) => {
-    new FeatureService(url).getFeaturesBySQL(sqlParam, (serviceResult) => {
+    new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
       if (serviceResult.type === "processFailed" || serviceResult.error) {
         message(`${serviceResult.error}`, { type: "error", grouping: true });
 
@@ -162,7 +162,7 @@ async function sqlQuery({
       } else {
         const features = serviceResult.result.features;
         const total = serviceResult.result.totalCount;
-        if (features.lenth === 0) {
+        if (features.length === 0) {
           message(`未查询到数据`, { type: "error" });
 
           // ElMessage({

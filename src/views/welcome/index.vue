@@ -10,7 +10,7 @@ import {
 } from "vue";
 import MapContainer from "@/layout/components/MapContainer/MapContainer.vue";
 import { message } from "@/utils/message";
-
+import { earthquake } from "@/api/map";
 import { ElMessage, ElLoading } from "element-plus";
 // import initMap from "@/utils/echartsMap"
 import {
@@ -18,6 +18,7 @@ import {
   getDatasetsName,
   sqlQuery
 } from "@/utils/mapAnalysis/analysis";
+import pulsingLayer, { generateIcon } from "@/utils/mapAnalysis/pulsingLayer";
 import { debounce } from "@/utils/mapAnalysis/tool";
 import { HeatMapLayer } from "@supermap/iclient-leaflet";
 
@@ -25,10 +26,26 @@ defineOptions({
   name: "Welcome"
 });
 
+const options = {
+  zoomControl: true,
+  logoControl: false,
+  attributionControl: false
+};
 const customMap = shallowReactive({
   map: null,
   features: null
 });
+
+// const heatMapLayer = new HeatMapLayer(
+//   "heatMap",
+//   ["blue", "cyan", "lime", "yellow", "red"],
+//   {
+//     id: "heatmap",
+//     map: customMap.map,
+//     radius: 80,
+//     featureWeight: "CLASS"
+//   }
+// );
 // const heatMapLayer = shallowReactive(
 //   new HeatMapLayer("heatMap", ["blue", "cyan", "lime", "yellow", "red"], {
 //     id: "heatmap",
@@ -129,11 +146,20 @@ function datasetChange() {
 //   customMap.features = res
 // })
 
-onMounted(() => {
+onMounted(async () => {
   getDatasetNames();
+  const { result } = await earthquake();
+  result.map(item =>
+    L.marker([item.EPI_LAT, item.EPI_LON], {
+      icon: generateIcon(Number(item.M), 3)
+    }).addTo(customMap.map)
+  );
+  console.log(result);
   nextTick(() => {
     console.log(customMap.map);
     sqlQuery({ filter: "QUAKEDATE >= 2022-02-20" }).then(({ features }) => {
+      const plusLayer = pulsingLayer(features, customMap.map);
+
       initHeatMap(features);
     });
   });
@@ -224,6 +250,7 @@ function initHeatMap(
         }
       "
       :loading="loading"
+      :options="options"
     />
   </div>
 </template>

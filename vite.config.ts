@@ -2,8 +2,8 @@
  * @Author: Faith
  * @Date: 2023-02-04 10:49
  * @LastAuthor: Faith
- * @LastEditTime: 2023-02-05 11:16
- * @Description: 
+ * @LastEditTime: 2023-03-24 14:49
+ * @Description:
  */
 import dayjs from "dayjs";
 import { resolve } from "path";
@@ -57,15 +57,15 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           ws: true,
           changeOrigin: true,
           secure: true,
-          rewrite: path => path.replace(/^\/gaode/, ""),
+          rewrite: path => path.replace(/^\/gaode/, "")
         },
         "/api": {
           target: "http://localhost:3021/",
           ws: true,
           changeOrigin: true,
           secure: true,
-          rewrite: path => path.replace(/^\/api/, ""),
-        },
+          rewrite: path => path.replace(/^\/api/, "")
+        }
       }
     },
     plugins: getPluginsList(command, VITE_CDN, VITE_COMPRESSION),
@@ -86,7 +86,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         output: {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",
-          assetFileNames: "static/[ext]/[name]-[hash].[ext]",
+          assetFileNames: "static/[ext]/[name]-[hash].[ext]"
           // manualChunks: {
           //   // "@supermap/iclient-leaflet": ["@supermap/iclient-leaflet"],
           //   // 试了一下传字符串也是可以的
