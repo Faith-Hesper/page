@@ -1,3 +1,5 @@
+// import L from "leaflet"
+
 declare module "vue" {
   /**
    * 自定义全局组件获得 Volar 提示（自定义的全局组件需要在这里声明下才能获得 Volar 类型提示哦）
@@ -7,7 +9,7 @@ declare module "vue" {
     IconifyIconOnline: typeof import("../src/components/ReIcon")["IconifyIconOnline"];
     FontIcon: typeof import("../src/components/ReIcon")["FontIcon"];
     Auth: typeof import("../src/components/ReAuth")["Auth"];
-    DragCard: typeof import("../src/layout/components/common/DragCard")["Auth"]
+    DragCard: typeof import("../src/layout/components/common/DragCard")["DragCard"];
   }
 }
 
@@ -119,6 +121,7 @@ declare module "vue" {
     $confirm: typeof import("element-plus")["ElMessageBox"]["confirm"];
     $prompt: typeof import("element-plus")["ElMessageBox"]["prompt"];
     $loading: typeof import("element-plus")["ElLoadingService"];
+    // L: any;
     // $BASE_CONFIG: typeof import("../src/config/config")["BASE_CONFIG"]
   }
 }

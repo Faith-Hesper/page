@@ -8,7 +8,18 @@ import { useLayout } from "./hooks/useLayout";
 import { useAppStoreHook } from "@/store/modules/app";
 import { useSettingStoreHook } from "@/store/modules/settings";
 import { deviceDetection, useDark, useGlobal } from "@pureadmin/utils";
-import { h, reactive, computed, onMounted, defineComponent } from "vue";
+import {
+  h,
+  ref,
+  reactive,
+  computed,
+  onMounted,
+  defineComponent,
+  watch
+} from "vue";
+
+import { message } from "@/utils/message";
+import { useSocket } from "@/utils/socket";
 
 import navbar from "./components/navbar.vue";
 import tag from "./components/tag/index.vue";
@@ -23,6 +34,14 @@ const { layout } = useLayout();
 const isMobile = deviceDetection();
 const pureSetting = useSettingStoreHook();
 const { $storage } = useGlobal<GlobalPropertiesApi>();
+
+const socket = reactive(useSocket());
+
+// watch(socket.result,(nVal) => {
+//   message(nVal.data[0])
+// }, {
+//   immediate: true
+// })
 
 const set: setType = reactive({
   sidebar: computed(() => {

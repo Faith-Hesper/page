@@ -1,3 +1,10 @@
+/*
+ * @Author: Faith
+ * @Date: 2023-02-04 10:49
+ * @LastAuthor: Faith
+ * @LastEditTime: 2023-05-02 14:20
+ * @Description:
+ */
 // 模拟后端动态生成路由
 import { MockMethod } from "vite-plugin-mock";
 
@@ -42,7 +49,7 @@ export default [
     response: () => {
       return {
         success: true,
-        data: [permissionRouter]
+        data: []
       };
     }
   }

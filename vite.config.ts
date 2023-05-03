@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2023-02-04 10:49
  * @LastAuthor: Faith
- * @LastEditTime: 2023-03-24 14:49
+ * @LastEditTime: 2023-04-14 09:56
  * @Description:
  */
 import dayjs from "dayjs";
@@ -52,6 +52,13 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       host: "0.0.0.0",
       // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
       proxy: {
+        "/tianditu": {
+          target: "http://api.tianditu.gov.cn",
+          ws: true,
+          changeOrigin: true,
+          secure: true,
+          rewrite: path => path.replace(/^\/tianditu/, "")
+        },
         "/gaode": {
           target: "https://restapi.amap.com",
           ws: true,
@@ -59,9 +66,15 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           secure: true,
           rewrite: path => path.replace(/^\/gaode/, "")
         },
+        "/geo": {
+          target: "https://nominatim.openstreetmap.org",
+          ws: true,
+          changeOrigin: true,
+          secure: true,
+          rewrite: path => path.replace(/^\/geo/, "")
+        },
         "/api": {
           target: "http://localhost:3021/",
-          ws: true,
           changeOrigin: true,
           secure: true,
           rewrite: path => path.replace(/^\/api/, "")

@@ -8,6 +8,8 @@ import type { ECharts } from "echarts";
 import type { IconifyIcon } from "@iconify/vue";
 import type { TableColumns } from "@pureadmin/table";
 import { type RouteComponent, type RouteLocationNormalized } from "vue-router";
+import type { MapConfig, BaseConfig } from "@/config/type";
+import "./leaflet-geoman.d";
 
 /**
  * 全局类型声明，无需引入直接在 `.vue` 、`.ts` 、`.tsx` 文件使用即可获得类型提示
@@ -32,6 +34,7 @@ declare global {
   interface Window {
     // Global vue app instance
     __APP__: App<Element>;
+    BASE_CONFIG: BaseConfig;
     webkitCancelAnimationFrame: (handle: number) => void;
     mozCancelAnimationFrame: (handle: number) => void;
     oCancelAnimationFrame: (handle: number) => void;
@@ -64,18 +67,6 @@ declare global {
     VITE_ROUTER_HISTORY: string;
     VITE_CDN: boolean;
     VITE_COMPRESSION: ViteCompression;
-  }
-
-  interface BASE_CONFIG {
-    key: string,
-    MAP: object,
-    BASEURL: {
-      mapUrl: string, 
-      dataUrl: string,
-      spatialAnalystUrl: string,
-      newworkServiceUrl: string,
-      traffictransferanalystUrl: string,
-    }
   }
 
   /**

@@ -1,3 +1,10 @@
+/*
+ * @Author: Faith
+ * @Date: 2023-02-04 10:49
+ * @LastAuthor: Faith
+ * @LastEditTime: 2023-03-29 14:21
+ * @Description:
+ */
 import { http } from "@/utils/http";
 
 export type UserResult = {
@@ -30,7 +37,11 @@ export type RefreshTokenResult = {
 
 /** 登录 */
 export const getLogin = (data?: object) => {
-  return http.request<UserResult>("post", "/login", { data });
+  return http.request<UserResult>("post", "/api/login", { data });
+};
+
+export const regist = (data?: object) => {
+  return http.request<UserResult>("post", "/api/Register", { data });
 };
 
 /** 刷新token */

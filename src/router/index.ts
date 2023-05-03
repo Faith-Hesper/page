@@ -94,7 +94,7 @@ export function resetRouter() {
 }
 
 /** 路由白名单 */
-const whiteList = ["/login"];
+const whiteList = ["/login", "/visual"];
 
 router.beforeEach((to: toRouteType, _from, next) => {
   if (to.meta?.keepAlive) {

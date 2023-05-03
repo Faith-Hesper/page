@@ -8,7 +8,7 @@
 
 import "./L.Icon.Pulse";
 
-type PulsingIconProps = {
+export type PulsingIconProps = {
   size?: number;
   color?: string;
   fillColor?: string; // 填充色
@@ -19,7 +19,7 @@ const pulsingIcon = ({
   size = 12,
   color = "F60",
   fillColor = "FAA90E",
-  animate = true
+  animate = false
 }: PulsingIconProps = {}) => {
   return L.icon.pulse({
     iconSize: [size, size],

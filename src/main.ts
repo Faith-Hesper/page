@@ -1,3 +1,10 @@
+/*
+ * @Author: Faith
+ * @Date: 2023-02-04 10:49
+ * @LastAuthor: Faith
+ * @LastEditTime: 2023-05-01 20:04
+ * @Description:
+ */
 import App from "./App.vue";
 import router from "./router";
 import { setupStore } from "@/store";
@@ -10,10 +17,16 @@ import { MotionPlugin } from "@vueuse/motion";
 import { injectResponsiveStorage } from "@/utils/responsive";
 
 import * as L from "leaflet";
-import "leaflet/dist/leaflet.css";
+// import "leaflet/dist/leaflet.css";
+// import "leaflet-draw/dist/leaflet.draw.css"
 import "./assets/css/map.scss";
 import "./assets/css/L.Icon.Pulse.css";
-
+import "@/utils/mapAnalysis/L.ellipse.js";
+// import "../types/leaflet-geoman.d"
+// import '@geoman-io/leaflet-geoman-free';
+// import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+// L.PM.setOptIn(false);
+// console.log(L.PM);
 import "@/config/config";
 // import "@/utils/measure"
 
@@ -31,7 +44,7 @@ import "element-plus/dist/index.css";
 import "./assets/iconfont/iconfont.js";
 import "./assets/iconfont/iconfont.css";
 
-// import "@supermap/iclient-leaflet"
+import "@supermap/iclient-leaflet";
 
 import DragCard from "@/layout/components/common/DragCard.vue";
 
@@ -58,6 +71,8 @@ app.component("DragCard", DragCard);
 // 全局注册按钮级别权限组件
 import { Auth } from "@/components/ReAuth";
 app.component("Auth", Auth);
+
+app.config.globalProperties.L = L;
 
 // app.config.globalProperties.$BASE_CONFIG = BASE_CONFIG
 
