@@ -1,6 +1,16 @@
 <template>
   <div v-drag:[draggable]="true" class="draggable">
-    <div class="dialog-content">
+    <div
+      class="toggle-icon"
+      @click="toggleDialog"
+      :title="showContent ? '隐藏' : title"
+    >
+      <IconifyIconOnline
+        icon="ant-design:cloud-filled"
+        style="color: #000; width: 24px; height: 24px"
+      ></IconifyIconOnline>
+    </div>
+    <div class="dialog-content" :class="{ hidden: !showContent }">
       <div class="header dialog-header" v-if="title">
         <div class="title">{{ title }}</div>
       </div>
@@ -42,6 +52,16 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      showContent: true
+    };
+  },
+  methods: {
+    toggleDialog() {
+      this.showContent = !this.showContent;
+    }
+  },
   setup(props) {}
 };
 </script>
@@ -50,6 +70,27 @@ export default {
 .draggable {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  .toggle-icon {
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    background: #fff;
+    width: 32px;
+    height: 32px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
+    z-index: 5;
+  }
+
+  .hidden {
+    opacity: 0;
+    display: none;
+  }
+
   .dialog-content {
     position: fixed;
     border-radius: 4px;
@@ -58,11 +99,15 @@ export default {
     background-color: var(--el-bg-color);
     overflow: hidden;
     z-index: 5;
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+
     .header {
       width: 100%;
       height: 30px;
       background: #428bca;
       margin-bottom: 2px;
+
       .title {
         font-size: 16px;
         line-height: 30px;
@@ -70,6 +115,7 @@ export default {
         color: white;
       }
     }
+
     .detail {
       padding: 5px;
     }

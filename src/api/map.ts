@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2023-02-04 17:37
  * @LastAuthor: Faith
- * @LastEditTime: 2023-05-02 11:02
+ * @LastEditTime: 2023-05-05 14:45
  * @Description:
  */
 import axios from "axios";
@@ -25,24 +25,35 @@ type allDataResult = {
   data: any;
 };
 // 查询POI
-export const gaodePoi = (keywords?: string, pageNum?: number) => {
-  return http.request<any>("get", `/gaode/v5/place/text`, {
+export const gaodePoi = (
+  keywords?: string,
+  pageNum?: number,
+  city?: number | string
+) => {
+  // const keyword = keywords + '|应急|避难|地震'
+  console.log(city);
+  return http.request<any>("get", `/gaode/v3/place/text`, {
     params: {
-      keywords: keywords || "应急|避难|地震",
-      page_size: 25,
-      page_num: pageNum || 1,
-      output: "json",
-      show_fields: "business,photos",
+      keywords: keywords,
+      types: "应急|避难|地震",
+      offset: 25,
+      page: pageNum || 1,
+      city: city || "全国",
+      // city_limit: true,
+      // output: "json",
+      // show_fields: "business,photos",
       key: "9e0e94d92d5a912fdac6b10b7f1fe75a"
     }
   });
 };
 
 // 获取高德提示
-export const gaodeTip = k => {
+export const gaodeTip = (k: string, city?: number | string) => {
   return http.request<any>("get", `/gaode/v3/assistant/inputtips`, {
     params: {
       keywords: k || "北京市",
+      type: "200400|220200|141200|地震|避难|应急",
+      city: city || "全国",
       output: "json",
       key: "9e0e94d92d5a912fdac6b10b7f1fe75a"
     }
@@ -92,7 +103,7 @@ interface searchParams {
 export const tiandiSearchGeo = (searchParams: searchParams) => {
   const {
     keyWord = "北京市",
-    level = "18",
+    level = "12",
     mapBound = "-180,-90,180,90",
     queryType = "4",
     count = "20",

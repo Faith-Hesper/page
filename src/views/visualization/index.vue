@@ -78,21 +78,13 @@ const heatChart = shallowRef();
 
 const sqlString = reactive({
   from: 2012,
-  to: 2020,
+  to: 2022,
   M: 1
 });
 const data = ref({
-  year: [
-    "2012",
-    "2013",
-    "2014",
-    "2015",
-    "2016",
-    "2017",
-    "2018",
-    "2019",
-    "2020"
-  ],
+  year: Array.from({ length: sqlString.to - sqlString.from + 1 }, (_, index) =>
+    (sqlString.from + index).toString()
+  ),
   month: [
     "1月",
     "2月",
@@ -129,7 +121,7 @@ const timelineOptions = {
       // inverse: true,
       playInterval: 8000,
       // right: 30,
-      left: 20,
+      // left: 20,
       // bottom: 40,
       // width: 55,
       // height: null,
@@ -184,6 +176,14 @@ const barChartOptions = {
     {
       type: "bar",
       name: "柱状图",
+      barWidth: "50%",
+      itemStyle: {
+        normal: {
+          color: "#2f89cf",
+          opacity: 1,
+          barBorderRadius: 5
+        }
+      },
       label: { show: true, position: "top", color: "#fff" },
       data: data.value.result[data.value.year[0]]
     }
@@ -233,7 +233,7 @@ const lineChartOptions = {
             color: "rgb(255, 158, 68)"
           },
           {
-            offset: 1,
+            offset: 0.8,
             color: "rgb(255, 70, 131)"
           }
         ])
@@ -263,19 +263,22 @@ const pieChartOptions = {
     formatter: "{b0}:{c0}"
   },
   legend: {
-    orient: "vertical",
-    left: 10,
+    show: false,
+    orient: "horizontal",
+    bottom: 0,
     data: ["一季度", "二季度", "三季度", "四季度"]
   },
   series: [
     {
       name: "饼图",
       type: "pie",
-      radius: ["20%", "60%"],
-      center: ["50%", "60%"],
-      roseType: "area",
+      radius: ["40%", "70%"],
+      // center: ["50%", "60%"],
+      // roseType: "area",
       itemStyle: {
-        borderRadius: 8
+        borderRadius: 10,
+        borderColor: "#fff",
+        borderWidth: 2
       },
       data: [
         { value: 335, name: "一季度" },
@@ -329,7 +332,7 @@ const scatterChartOptions = {
   grid: {
     right: 20,
     bottom: 20,
-    containLabel: true
+    containLabel: false
   },
   series: [
     {
@@ -572,6 +575,7 @@ function defineOptions(arg0: { name: string }) {
   // position: absolute;
   width: 100%;
   height: 100%;
+  border-radius: 3px;
   z-index: 0;
 }
 
@@ -591,9 +595,11 @@ function defineOptions(arg0: { name: string }) {
     justify-content: space-between;
     align-items: flex-start;
   }
+
   .linked-charts:nth-child(2) {
     flex: 1;
   }
+
   .chart {
     width: 300px;
     height: 100%;
@@ -607,6 +613,7 @@ function defineOptions(arg0: { name: string }) {
     // grid-row: 1 / span 2;
   }
 }
+
 .timeline {
   width: 100%;
   height: 50px;

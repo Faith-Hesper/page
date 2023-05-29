@@ -22,6 +22,7 @@ const props = defineProps({
   chartData: {
     type: Object as PropType<any>,
     default: () => ({
+      title: "",
       category: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       data: [120, 200, 150, 80, 70, 110, 130]
     })
@@ -31,6 +32,10 @@ const props = defineProps({
 
 function initOption() {
   const option: EChartsOption = {
+    title: {
+      left: "center",
+      text: props.chartData.title
+    },
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -94,6 +99,6 @@ watchEffect(() => {
 <style scoped>
 .chart {
   width: 100%;
-  height: 320px;
+  height: 300px;
 }
 </style>

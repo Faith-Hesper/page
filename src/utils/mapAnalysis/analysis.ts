@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2022-04-02 17:08
  * @LastAuthor: Faith
- * @LastEditTime: 2023-04-01 11:54
+ * @LastEditTime: 2023-05-16 16:27
  * @Description: 超图分析函数
  */
 import { Feature, FeatureCollection, Geometry, GeoJSON } from "geojson";
@@ -115,7 +115,7 @@ async function getFieldsName(url = CONFIG.BASEURL.dataUrl): Promise<string[]> {
     let fieldNames: string[] = [];
     const fieldsParam = new FieldParameters({
       datasource: "points",
-      dataset: "earthquakePoint"
+      dataset: "quake"
     });
     return await new Promise((resolve, reject) => {
       new FieldService(url).getFields(fieldsParam, serviceResult => {
@@ -196,9 +196,14 @@ async function sqlQuery({
             reject(serviceResult.error);
           } else {
             const featuresObj = serviceResult.result.features;
+            const featureCount = serviceResult.result.featureCount;
             const total = serviceResult.result.totalCount;
             if (featuresObj.features.length === 0) {
               message(`未查询到数据`, { type: "error" });
+            } else {
+              message(`查询到${featureCount}条数据,一共${total}条数据`, {
+                type: "success"
+              });
             }
             resolve({ features: featuresObj, total });
           }

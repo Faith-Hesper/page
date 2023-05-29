@@ -26,7 +26,7 @@ import {
   onBeforeUnmount,
   getCurrentInstance,
   ref,
-  shallowReactive,
+  shallowRef,
   nextTick,
   toRef,
   watch
@@ -38,7 +38,7 @@ import type { Ref, PropType } from "vue";
 import searchControl from "./searchControl.vue";
 import LayerControl from "./layerControl.vue";
 import CustomControl from "./customControl";
-import HomeControl from "./Home";
+import HomeControl from "./Control/Home";
 import cursorLocation from "./cursorLocation.vue";
 import initLayer from "./TileLayer";
 
@@ -54,7 +54,7 @@ import "@/utils/L.draw-local";
 // import { sqlQuery, buffer_Analysis } from "@/utils/analysis"
 import { HeatMapLayer, TiandituTileLayer } from "@supermap/iclient-leaflet";
 
-const map: Ref<L.Map> = ref(null);
+const map: Ref<L.Map> = shallowRef(null);
 const mapView = ref(null);
 const loading = ref(false);
 const control = ref(null);
@@ -134,6 +134,10 @@ onMounted(() => {
       name: name,
       layer: layer
     });
+  };
+  map.value.rmOverLayer = function (name, layer) {
+    console.log(layer);
+    overLayer.value.filter(l => l.options.name !== name);
   };
   // map.value.on("layeradd", addLayer);
   // map.value.on("layerremove", rmLayer);
@@ -249,8 +253,8 @@ onBeforeUnmount(() => {
   z-index: 0;
   .search {
     position: absolute;
-    top: 40%;
-    left: 0;
+    top: 2px;
+    left: 5%;
     z-index: 800;
   }
   .topleft {

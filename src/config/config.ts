@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2022-06-20 19:23
  * @LastAuthor: Faith
- * @LastEditTime: 2023-05-02 16:21
+ * @LastEditTime: 2023-05-05 13:53
  * @Description:
  */
 interface MapConfig {
@@ -49,7 +49,7 @@ const MAP_CONFIG: MapConfig = {
   preferCanvas: true,
   minZoom: 1.4,
   maxZoom: 18,
-  zoom: 8,
+  zoom: 3,
   zoomControl: false,
   map_crs: "EPSG4326",
   maxBounds: [

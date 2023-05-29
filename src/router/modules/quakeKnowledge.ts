@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2023-04-17 16:31
  * @LastAuthor: Faith
- * @LastEditTime: 2023-05-01 16:58
+ * @LastEditTime: 2023-05-03 21:53
  * @Description:
  */
 import { $t } from "@/plugins/i18n";
@@ -15,7 +15,7 @@ export default {
   meta: {
     icon: Knowledge,
     title: "地震科普",
-    rank: 3
+    rank: 4
     // keepAlive: true
   }
 } as RouteConfigsTable;

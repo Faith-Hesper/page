@@ -11,7 +11,10 @@
       :style="{ display: collopased ? 'none' : 'block' }"
       v-model="geoName"
       class="inline-input w-50 expand"
+      fit-input-width
+      popper-append-to-body
       highlight-first-item
+      :trigger-on-focus="false"
       :fetch-suggestions="querySearchAsync"
       placeholder="Please input"
       @select="handleSelect"
@@ -31,7 +34,10 @@
       </template>
       <template #default="{ item }">
         <div class="value">{{ item.value }}</div>
-        <span class="link">{{ item.link }}</span>
+        <span class="link">
+          <span class="name">{{ item.data.name }}</span>
+          <span class="address">{{ item.data.address }}</span>
+        </span>
       </template>
     </ElAutocomplete>
   </div>
@@ -53,12 +59,13 @@ const geoTips = ref<LinkItem[]>([]);
 const emit = defineEmits(["geoInfo"]);
 
 const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
-  tiandiSearchGeo({ keyWord: queryString })
+  if (!queryString) cb([]);
+  tiandiSearchGeo({ keyWord: queryString, queryType: 4 })
     .then(res => {
       const { suggests } = res;
       console.log(res);
       const results = suggests.map(item => {
-        return { value: item.name, data: item };
+        return { value: item.address, data: item };
       });
       cb(results);
     })
@@ -82,6 +89,12 @@ const handleSelect = async (item: LinkItem) => {
 </script>
 
 <style lang="scss" scoped>
+.link {
+  .address {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+}
 .search {
   display: flex;
   justify-content: flex-start;
@@ -90,6 +103,7 @@ const handleSelect = async (item: LinkItem) => {
   cursor: auto;
   margin: 10px;
   background: #fff;
+  transform: scale(1);
   transition: all 1.3s ease;
 
   .searchIcon {
@@ -100,6 +114,8 @@ const handleSelect = async (item: LinkItem) => {
   }
   .expand {
     width: 0;
+    transform: scale(0);
+    opacity: 0;
   }
 }
 </style>

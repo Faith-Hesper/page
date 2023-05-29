@@ -21,7 +21,8 @@ import {
 
 import { ElMessage, ElLoading } from "element-plus";
 // import initMap from "@/utils/echartsMap"
-import datasetQuery from "@/layout/components/MapContainer/datasetQuery.vue";
+
+import QuakeTable from "@/layout/components/common/QuakeTable.vue";
 import MapContainer from "@/layout/components/MapContainer/MapContainer.vue";
 
 // import L from "leaflet";
@@ -48,9 +49,11 @@ import { useRouter, useRoute } from "vue-router";
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 dayjs.extend(isToday);
+
 defineOptions({
   name: "Welcome"
 });
+
 const freshStamp = ref(1681266154770);
 const socket = reactive(useSocket(freshStamp));
 
@@ -119,6 +122,7 @@ async function initYearData() {
   //   yearDatas.push(item.count);
   // });
   yearData.value = {
+    title: "过去1年内M>6的地震",
     category: [
       "1月",
       "2月",
@@ -133,7 +137,7 @@ async function initYearData() {
       "11月",
       "12月"
     ],
-    data: stData.result["2021"]
+    data: stData.result["2022"]
   };
 }
 
@@ -165,7 +169,7 @@ function initFeatureLayer() {
   const group = L.featureGroup(recentPoints)
     .on("click", e => {
       e.layer.openPopup();
-      let latlng = e.latlng.lat + "," + e.latlng.lng;
+      let { lat, lng } = e.latlng;
       const title = e.layer.options.title;
       const id = L.Util.stamp(e.layer).toString();
       console.log(e);
@@ -174,14 +178,14 @@ function initFeatureLayer() {
         console.log("object");
         router.push({
           path: `/dataAnalysis/surround`,
-          query: { id, title, latlng }
+          query: { id, title, lat, lng }
         });
       };
     })
     .addTo(customMap.map);
   // console.log(group);
   customMap.map.addOverLayer("qu", group);
-  customMap.map.fitBounds(group.getBounds(), { padding: [50, 50] });
+  // customMap.map.fitBounds(group.getBounds(), { padding: [50, 50] });
 }
 
 onMounted(async () => {
@@ -197,6 +201,28 @@ onMounted(async () => {
 
   // console.log(searchRes);
 });
+
+function weekToInfo(data) {
+  // console.log(data);
+  const { location, time, lat, lng, M } = data;
+  router.push({
+    path: `/dataAnalysis/surround`,
+    query: { location, time, lat, lng, M }
+  });
+}
+
+function toRoute(data) {
+  console.log(data.EPI_LAT, data.EPI_LON);
+  let location = data.LOCATION_C;
+  let time = data.O_TIME;
+  let lat: string = data.EPI_LAT;
+  let lng: string = data.EPI_LON;
+  let M = data.M;
+  router.push({
+    path: `/shelter`,
+    query: { location, time, lat, lng, M }
+  });
+}
 
 function defineOptions(arg0: { name: string }) {
   throw new Error("Function not implemented.");
@@ -237,6 +263,7 @@ function defineOptions(arg0: { name: string }) {
                 <div
                   class="info-box"
                   :class="[dayjs(item.O_TIME).isToday() ? 'hot' : '']"
+                  @click="toRoute(item)"
                 >
                   <i></i>
                   <span class="text">{{ quakeInfoText(item) }}</span>
@@ -259,43 +286,18 @@ function defineOptions(arg0: { name: string }) {
           </template>
           <el-skeleton animated :loading="loading">
             <template #default>
-              <el-table
-                :data="recentData"
-                max-height="400"
-                :header-cell-style="{
-                  // textAlign: 'center',
-                  // background: '#E4EEF6',
-                  height: '21px'
-                }"
-              >
-                <el-table-column prop="class" label="震级"></el-table-column>
-                <el-table-column prop="date" label="地震时间"></el-table-column>
-                <el-table-column prop="lat" label="纬度"></el-table-column>
-                <el-table-column prop="lng" label="经度"></el-table-column>
-                <el-table-column prop="depth" label="深度/kg"></el-table-column>
-                <el-table-column label="参考位置">
-                  <template #default="scope">
-                    <el-tag class="location-cell" type="success" @click="">{{
-                      scope.row.location
-                    }}</el-tag>
-                  </template>
-                </el-table-column>
-              </el-table>
+              <QuakeTable :table-data="recentData" :row-fn="weekToInfo" />
             </template>
           </el-skeleton>
         </el-card>
       </el-col>
     </el-row>
     <el-row :gutter="24">
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-        <el-card
-          shadow="never"
-          style="height: 347px"
-          :body-style="{ padding: '0px' }"
-        >
+      <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10">
+        <el-card shadow="never" :body-style="{ padding: '0px' }">
           <template #header>
             <div class="header">
-              <div>最近1年内M>1的地震频率</div>
+              <div>地震年报</div>
               <el-icon style="cursor: pointer" @click="initYearData">
                 <freshIcon />
               </el-icon>
@@ -308,10 +310,10 @@ function defineOptions(arg0: { name: string }) {
           </el-skeleton>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+      <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
         <el-card shadow="never" :body-style="{ padding: '0px' }">
           <template #header>
-            <div>最近24小时内M>1的地震</div>
+            <div>地震视图</div>
           </template>
           <el-skeleton animated :loading="loading">
             <template #default>
@@ -343,11 +345,6 @@ function defineOptions(arg0: { name: string }) {
   margin-bottom: 0;
 }
 
-.location-cell:hover {
-  cursor: pointer;
-  color: #5e94fa;
-}
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -372,7 +369,7 @@ function defineOptions(arg0: { name: string }) {
 
     .text {
       flex: 1;
-      cursor: default;
+      cursor: pointer;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
